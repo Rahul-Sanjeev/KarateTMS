@@ -31,18 +31,6 @@ function AppShell() {
   const { currentUser } = state;
   const [activeTab, setActiveTab] = useState('Home');
 
-  // Show loading screen while fetching from Supabase
-  if (cloudLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="w-12 h-12 border-4 border-zinc-700 border-t-crimson rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-zinc-400 text-sm font-medium">Loading from cloud…</p>
-        </div>
-      </div>
-    );
-  }
-
   // On login, switch to correct default tab
   useEffect(() => {
     if (!currentUser) {
@@ -104,6 +92,17 @@ function AppShell() {
 
   // Timer gets its own dark full-screen layout
   const isTimer = activeTab === 'Timer';
+
+  if (cloudLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center animate-fade-in">
+          <div className="w-12 h-12 border-4 border-zinc-700 border-t-crimson rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-zinc-400 text-sm font-medium">Loading from cloud…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black">
