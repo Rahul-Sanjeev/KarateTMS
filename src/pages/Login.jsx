@@ -115,7 +115,7 @@ export default function Login({ setActiveTab }) {
           <div className="divider" />
 
           <div className="text-center text-xs text-zinc-600">
-            Default admin: <span className="text-zinc-400 font-mono">admin / karate2025</span>
+            Contact your administrator for login credentials.
           </div>
         </div>
 
