@@ -158,6 +158,11 @@ function AppShell() {
       <main className="flex-1 flex flex-col relative overflow-hidden">
         {renderPage()}
       </main>
+      <footer className="no-print w-full py-4 flex justify-center opacity-30">
+        <p className="text-[10px] text-zinc-500 font-medium tracking-widest uppercase">
+          Powered by Voxelyn Dynamics
+        </p>
+      </footer>
       <Toast />
     </div>
   );
