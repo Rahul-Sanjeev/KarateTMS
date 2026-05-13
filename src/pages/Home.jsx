@@ -7,66 +7,66 @@ export default function Home({ setActiveTab }) {
   const { currentUser } = state;
 
   return (
-    <div className="min-h-0 flex flex-col relative overflow-hidden bg-[#050505] font-sans selection:bg-crimson/30 rounded-[var(--radius-fluid)]">
+    <div className="min-h-[calc(100vh-56px)] flex flex-col relative overflow-hidden bg-[#050505] font-sans selection:bg-crimson/30">
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center overflow-hidden">
-        <div className="w-[50vw] h-[50vw] bg-crimson/5 rounded-full blur-[clamp(4rem,10vw,8rem)] absolute -top-[10%] opacity-60 mix-blend-screen" />
-        <div className="w-[40vw] h-[40vw] bg-blue-600/5 rounded-full blur-[clamp(4rem,10vw,8rem)] absolute -bottom-[5%] opacity-50 mix-blend-screen" />
+        <div className="w-[800px] h-[800px] bg-crimson/5 rounded-full blur-[120px] absolute -top-[200px] opacity-60 mix-blend-screen" />
+        <div className="w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[120px] absolute -bottom-[100px] opacity-50 mix-blend-screen" />
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-[var(--gap-fluid)] py-[var(--spacing-fluid)] z-10">
-        <div className="w-full max-w-full flex flex-col items-center">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-20 z-10">
+        <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
           
-          <div className="mb-[var(--gap-fluid)] text-crimson animate-fade-in">
+          <div className="mb-10 text-crimson animate-fade-in-up">
             <KarateSVG />
           </div>
 
-          <h1 className="text-center leading-tight mb-[var(--gap-fluid)] animate-fade-in text-white/90">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/60 tracking-tighter text-center leading-tight mb-6 animate-fade-in-up" style={{animationDelay: '100ms'}}>
             {info.name || 'KARATE TOURNAMENT'}
           </h1>
           
-          <div className="flex flex-wrap items-center justify-center gap-x-[var(--gap-fluid)] gap-y-2 text-[0.9rem] text-zinc-500 mb-[var(--spacing-fluid)] font-medium tracking-[0.1em] uppercase animate-fade-in">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-8 text-sm md:text-base text-zinc-400 mb-16 font-medium tracking-wide uppercase animate-fade-in-up" style={{animationDelay: '200ms'}}>
             {info.city && <span className="flex items-center gap-2"><MapPinIcon /> {info.city}</span>}
-            {info.city && info.date && <div className="hidden sm:block w-1 h-1 rounded-full bg-zinc-800" />}
+            {info.city && info.date && <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-zinc-800" />}
             {info.date && <span className="flex items-center gap-2"><CalendarIcon /> {new Date(info.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[var(--gap-fluid)] w-full max-w-[1200px] animate-fade-in">
+          <div className="grid sm:grid-cols-3 gap-6 w-full animate-fade-in-up" style={{animationDelay: '300ms'}}>
             <button
               onClick={() => setActiveTab('Timer')}
-              className="group relative flex flex-col items-center text-center p-[var(--gap-fluid)] rounded-[var(--radius-fluid)] bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all duration-500 overflow-hidden"
+              className="group relative flex flex-col items-center text-center p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all duration-300 overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 text-zinc-400 group-hover:text-white group-hover:scale-110 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 text-zinc-300 group-hover:text-white group-hover:scale-110 transition-all duration-300">
                 <TimerIcon />
               </div>
-              <h3 className="text-[1rem] font-bold text-white tracking-wide mb-2 uppercase italic">Match Timer</h3>
-              <p className="text-[0.8rem] text-zinc-500 leading-relaxed max-w-[20rem]">Launch the official live projection scoreboard.</p>
+              <h3 className="text-lg font-bold text-white tracking-wide mb-2">Match Timer</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">Launch the official live projection scoreboard.</p>
             </button>
 
             <button
               onClick={() => setActiveTab('Club Standings')}
-              className="group relative flex flex-col items-center text-center p-[var(--gap-fluid)] rounded-[var(--radius-fluid)] bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all duration-500 overflow-hidden"
+              className="group relative flex flex-col items-center text-center p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all duration-300 overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 text-zinc-400 group-hover:text-white group-hover:scale-110 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-6 text-zinc-300 group-hover:text-white group-hover:scale-110 transition-all duration-300">
                 <TrophyIcon />
               </div>
-              <h3 className="text-[1rem] font-bold text-white tracking-wide mb-2 uppercase italic">Live Standings</h3>
-              <p className="text-[0.8rem] text-zinc-500 leading-relaxed max-w-[20rem]">View real-time medal counts and ranks.</p>
+              <h3 className="text-lg font-bold text-white tracking-wide mb-2">Live Standings</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">View real-time medal counts and ranks.</p>
             </button>
 
             {!currentUser ? (
               <button
                 onClick={() => setActiveTab('Login')}
-                className="group relative flex flex-col items-center text-center p-[var(--gap-fluid)] rounded-[var(--radius-fluid)] bg-crimson/[0.03] border border-crimson/20 hover:border-crimson/50 hover:bg-crimson/[0.08] transition-all duration-500 overflow-hidden sm:col-span-2 lg:col-span-1"
+                className="group relative flex flex-col items-center text-center p-8 rounded-2xl bg-crimson/[0.03] border border-crimson/20 hover:border-crimson/50 hover:bg-crimson/[0.08] transition-all duration-300 overflow-hidden"
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-crimson/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="w-12 h-12 rounded-full bg-crimson/10 flex items-center justify-center mb-6 text-crimson group-hover:scale-110 transition-all duration-500">
+                <div className="absolute inset-0 bg-gradient-to-b from-crimson/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="w-12 h-12 rounded-full bg-crimson/10 flex items-center justify-center mb-6 text-crimson group-hover:scale-110 transition-all duration-300">
                   <UserIcon />
                 </div>
-                <h3 className="text-[1rem] font-bold text-white tracking-wide mb-2 uppercase italic">Staff Portal</h3>
-                <p className="text-[0.8rem] text-zinc-500 leading-relaxed max-w-[20rem]">Login for Coaches, Referees, and Tournament Staff.</p>
+                <h3 className="text-lg font-bold text-white tracking-wide mb-2">Staff Portal</h3>
+                <p className="text-sm text-zinc-500 leading-relaxed">Login for Coaches, Referees, and Admins.</p>
               </button>
             ) : (
               <button
@@ -74,14 +74,14 @@ export default function Home({ setActiveTab }) {
                   const fallback = { manager: 'Categories', coach: 'My Participants', scorer: 'Match Console', admin: 'Dashboard' };
                   setActiveTab(fallback[currentUser.role] || 'Dashboard');
                 }}
-                className="group relative flex flex-col items-center text-center p-[var(--gap-fluid)] rounded-[var(--radius-fluid)] bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all duration-500 overflow-hidden sm:col-span-2 lg:col-span-1"
+                className="group relative flex flex-col items-center text-center p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/20 hover:bg-white/[0.04] transition-all duration-300 overflow-hidden"
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center mb-6 text-emerald-400 group-hover:scale-110 transition-all duration-500">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center mb-6 text-emerald-400 group-hover:scale-110 transition-all duration-300">
                   <UserIcon />
                 </div>
-                <h3 className="text-[1rem] font-bold text-white tracking-wide mb-2 uppercase italic">My Dashboard</h3>
-                <p className="text-[0.8rem] text-zinc-500 leading-relaxed max-w-[20rem]">Return to your specialized management tools.</p>
+                <h3 className="text-lg font-bold text-white tracking-wide mb-2">My Dashboard</h3>
+                <p className="text-sm text-zinc-500 leading-relaxed">Return to your management tools.</p>
               </button>
             )}
           </div>
@@ -89,12 +89,12 @@ export default function Home({ setActiveTab }) {
       </div>
       
       {/* Footer */}
-      <div className="py-[var(--gap-fluid)] text-center z-10 mt-auto flex flex-col gap-2">
-        <p className="text-[0.65rem] font-bold tracking-[0.3em] text-zinc-700 uppercase">
+      <div className="py-8 text-center z-10 mt-auto flex flex-col gap-2">
+        <p className="text-xs font-medium tracking-widest text-zinc-600 uppercase">
           {info.organizer ? `Organized by ${info.organizer}` : 'Official Tournament Management System'}
         </p>
-        <p className="text-[0.6rem] font-black text-zinc-800 uppercase tracking-[0.2em]">
-          © {new Date().getFullYear()} • Powered by Antigravity Spatial Scaling
+        <p className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest">
+          © {new Date().getFullYear()} All rights reserved • Voxelyn Dynamics / Rahul Sanjeev
         </p>
       </div>
     </div>

@@ -152,108 +152,118 @@ export default function Brackets() {
   }
 
   return (
-  return (
-    <div className="animate-fade-in flex flex-col gap-[var(--spacing-fluid)] min-h-0">
-      {/* Lead the Mat Header */}
-      <header className="flex flex-col items-center justify-center text-center space-y-4 mb-8">
-         <div className="flex items-center gap-4">
-           <div className="h-[2px] w-12 bg-crimson" />
-           <h1 className="text-[2.5rem] font-black uppercase italic tracking-tighter text-white">Lead the Mat</h1>
-           <div className="h-[2px] w-12 bg-crimson" />
-         </div>
-         <p className="text-zinc-500 font-bold uppercase tracking-[0.4em] text-[0.7rem]">Official Tournament Visualization Protocol</p>
-      </header>
-
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-4 no-print">
-        <div className="flex gap-4 items-end flex-wrap flex-1">
-          <div className="min-w-[250px] max-w-sm">
-            <label className="text-[0.65rem] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2 block">Division Selection</label>
-            <select 
-              id="bracket-cat-select" 
-              className="w-full bg-[#121212] border-2 border-zinc-800 text-white rounded-xl px-4 py-3 text-[0.8rem] font-bold focus:outline-none focus:border-crimson transition-all appearance-none" 
-              value={selectedCatId} 
-              onChange={e => setSelectedCatId(e.target.value)}
-            >
-              <option value="">— Select Category —</option>
-              {lockedCats.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-          
-          {canGenerate && selectedCatId && (
-            <button
-              id="generate-bracket-btn"
-              onClick={handleGenerate}
-              disabled={selectedCat?.status === 'open'}
-              className="bg-white text-black hover:bg-zinc-200 px-8 py-3 rounded-xl font-black uppercase text-[0.7rem] tracking-widest transition-all shadow-xl active:scale-95 disabled:opacity-20"
-            >
-              {hasBracket ? 'Update Bracket' : 'Generate Draw'}
-            </button>
-          )}
+    <div className="max-w-screen-xl mx-auto px-4 py-8 animate-fade-in">
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Brackets</h1>
+          <p className="text-zinc-500 text-sm mt-1">Single-elimination tournament brackets</p>
         </div>
-
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 no-print flex-wrap">
           {hasBracket && (
-            <button onClick={handlePrint} className="bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white px-6 py-3 rounded-xl border-2 border-zinc-800 text-[0.7rem] font-black uppercase tracking-widest transition-all">
-              Print
-            </button>
+            <>
+              <button onClick={handlePrint} className="btn-secondary text-sm">🖨 Print Bracket</button>
+              {canGenerate && (
+                <button onClick={() => setConfirmReset(true)} className="btn-danger text-sm">Reset</button>
+              )}
+            </>
           )}
-          {canGenerate && hasBracket && (
-            <button onClick={() => setConfirmReset(true)} className="text-red-500/50 hover:text-red-500 text-[0.6rem] font-black uppercase tracking-widest px-4 py-2 transition-all">Reset</button>
+          {canGenerate && (
+            <button onClick={handlePrintAll} className="btn-secondary text-sm">🖨 Print All</button>
           )}
         </div>
       </div>
 
-      {/* Bracket Interface */}
+      {/* Category Selector */}
+      <div className="flex gap-3 mb-6 flex-wrap no-print">
+        <div className="flex-1 min-w-[200px] max-w-sm">
+          <label className="label">Select Category</label>
+          <select id="bracket-cat-select" className="select-field" value={selectedCatId} onChange={e => setSelectedCatId(e.target.value)}>
+            <option value="">— Choose a category —</option>
+            {lockedCats.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+            {categories.filter(c => c.status === 'open').map(c => (
+              <option key={c.id} value={c.id} disabled>{c.name} (open — lock first)</option>
+            ))}
+          </select>
+        </div>
+        {canGenerate && selectedCatId && (
+          <div className="flex items-end">
+            <button
+              id="generate-bracket-btn"
+              onClick={handleGenerate}
+              disabled={selectedCat?.status === 'open'}
+              title={selectedCat?.status === 'open' ? 'Lock the category first' : ''}
+              className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              ⚡ {hasBracket ? 'Regenerate' : 'Generate'} Bracket
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Print Header (hidden on screen) */}
+      <div className="hidden print:block mb-6">
+        <h1 className="text-2xl font-bold text-black">{tournamentInfo.name}</h1>
+        <p className="text-gray-600">{selectedCat?.name} · {tournamentInfo.city} · {tournamentInfo.date}</p>
+      </div>
+
+      {/* Bracket Display */}
       {!selectedCatId ? (
-        <div className="flex-1 flex flex-col items-center justify-center py-32 border-4 border-dashed border-zinc-900 rounded-[3rem] opacity-30">
-          <div className="text-[4rem] mb-4">🥋</div>
-          <p className="text-[0.8rem] font-black uppercase tracking-[0.3em] text-zinc-600">Protocol Awaiting Selection</p>
+        <div className="card text-center py-20">
+          <div className="text-5xl mb-4">🏆</div>
+          <p className="text-zinc-400 font-medium">Select a category to view its bracket</p>
         </div>
       ) : !hasBracket ? (
-        <div className="flex-1 flex flex-col items-center justify-center py-32 border-4 border-dashed border-zinc-900 rounded-[3rem]">
-          <div className="text-[4rem] mb-4">📋</div>
-          <p className="text-[0.8rem] font-black uppercase tracking-[0.3em] text-zinc-600 mb-2">No Active Bracket Found</p>
-          {selectedCat?.status === 'open' && <p className="text-zinc-700 text-[0.6rem] font-bold uppercase tracking-widest">Division must be locked before generating draw.</p>}
+        <div className="card text-center py-20">
+          <div className="text-5xl mb-4">📋</div>
+          <p className="text-zinc-400 font-medium mb-2">No bracket generated yet</p>
+          {selectedCat?.status === 'open' && <p className="text-zinc-600 text-sm">Lock the category first, then generate the bracket.</p>}
+          {selectedCat?.status === 'locked' && canGenerate && <p className="text-zinc-600 text-sm">Click "Generate Bracket" above to create the draw.</p>}
         </div>
       ) : (
-        <div className="flex-1 overflow-x-auto pb-12 scrollbar-none">
-          <div className="flex gap-[4vw] min-w-max p-8">
+        <div className="overflow-x-auto">
+          <div className="flex gap-0 min-w-max print-bracket">
             {rounds.map(({ round, matches: rMatches }) => (
-              <div key={round} className="flex flex-col gap-8">
-                <div className="text-center">
-                   <span className="text-zinc-700 font-black text-[0.6rem] uppercase tracking-[0.5em] mb-4 block">
-                      {getRoundLabel(round, totalRounds)}
-                   </span>
+              <div key={round} className="flex flex-col">
+                {/* Round header */}
+                <div className="text-center text-xs font-bold text-zinc-500 uppercase tracking-widest px-4 py-2 no-print">
+                  {getRoundLabel(round, totalRounds)}
                 </div>
-                <div className="flex flex-col justify-around h-full" style={{ gap: `${Math.pow(2, round - 1) * 2}rem` }}>
-                  {rMatches.map((m) => (
-                    <BracketMatch key={m.id} match={m} round={round} />
+                <div className="print:block hidden text-center text-xs font-bold text-gray-500 uppercase px-4 py-1">
+                  {getRoundLabel(round, totalRounds)}
+                </div>
+                {/* Matches in this round */}
+                <div className="flex flex-col" style={{ gap: `${Math.pow(2, round - 1) * 8}px` }}>
+                  {rMatches.map((m, idx) => (
+                    <BracketMatch key={m.id} match={m} isFirst={idx === 0} totalRounds={totalRounds} />
                   ))}
                 </div>
               </div>
             ))}
           </div>
 
+          {/* 3rd Place Match */}
           {thirdPlaceMatch && (
-            <div className="mt-16 pt-16 border-t border-zinc-900 flex flex-col items-center">
-              <span className="text-zinc-700 font-black text-[0.6rem] uppercase tracking-[0.5em] mb-6">Medal Protocol: Bronze Match</span>
-              <BracketMatch match={thirdPlaceMatch} round={1} />
+            <div className="mt-8 no-print">
+              <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3">3rd Place Match</div>
+              <BracketMatch match={thirdPlaceMatch} totalRounds={totalRounds} />
             </div>
           )}
         </div>
       )}
 
-      {/* Confirm Modal */}
+      {/* Reset Confirm */}
       {confirmReset && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-8 bg-black/95 backdrop-blur-md">
-          <div className="max-w-md w-full bg-[#121212] border-4 border-zinc-800 p-10 rounded-[3rem] text-center shadow-[0_0_100px_rgba(0,0,0,0.8)]">
-            <h3 className="text-[1.5rem] font-black text-white uppercase italic tracking-tighter mb-4">Purge Bracket Draw?</h3>
-            <p className="text-zinc-500 text-[0.8rem] font-medium leading-relaxed mb-8">This will irreversibly delete all match scoring and participation assignments for this division.</p>
-            <div className="flex flex-col gap-3">
-              <button onClick={handleReset} className="bg-red-600 hover:bg-red-500 text-white py-4 rounded-2xl font-black uppercase text-[0.7rem] tracking-[0.2em] transition-all">Confirm Purge</button>
-              <button onClick={() => setConfirmReset(false)} className="text-zinc-600 hover:text-white py-2 font-bold uppercase text-[0.6rem] tracking-widest transition-all">Cancel</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setConfirmReset(false)} />
+          <div className="relative card max-w-sm w-full shadow-2xl animate-fade-in text-center">
+            <div className="text-3xl mb-3">⚠️</div>
+            <h3 className="text-lg font-bold text-white mb-2">Reset Bracket?</h3>
+            <p className="text-zinc-400 text-sm mb-5">This will delete all match data for this category. This cannot be undone.</p>
+            <div className="flex gap-3 justify-center">
+              <button onClick={() => setConfirmReset(false)} className="btn-ghost">Cancel</button>
+              <button onClick={handleReset} className="bg-red-900 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-semibold">Reset</button>
             </div>
           </div>
         </div>
@@ -262,21 +272,19 @@ export default function Brackets() {
   );
 }
 
-function BracketMatch({ match, round }) {
+function BracketMatch({ match }) {
   const f1Won = match.winner && match.winner === match.fighter1?.id;
   const f2Won = match.winner && match.winner === match.fighter2?.id;
 
   return (
-    <div className="relative group">
-      <div className="w-[18rem] bg-[#121212] border-2 border-zinc-800 rounded-2xl overflow-hidden shadow-2xl transition-all group-hover:border-zinc-600">
+    <div className="w-52 mx-3 my-1">
+      <div className="border border-zinc-700 rounded-lg overflow-hidden bg-zinc-900 print:border-gray-300 print:bg-white shadow-sm">
         <Fighter fighter={match.fighter1} won={f1Won} lost={f2Won} score={match.scores?.f1} isBye={match.isBye} role="aka" />
-        <div className="h-px bg-zinc-800" />
+        <div className="border-t border-zinc-700 print:border-gray-300" />
         <Fighter fighter={match.fighter2} won={f2Won} lost={f1Won} score={match.scores?.f2} isBye={match.isBye} isByeSlot={match.isBye} role="ao" />
       </div>
-      
-      {/* SVG Style Connection Lines */}
-      {match.round < 4 && (
-         <div className="absolute top-1/2 -right-[4vw] w-[4vw] h-[2px] bg-zinc-800 z-0 hidden lg:block" />
+      {match.status === 'done' && !match.isBye && (
+        <div className="text-center text-[10px] text-zinc-600 mt-0.5 font-medium tracking-wide">DONE</div>
       )}
     </div>
   );
@@ -284,38 +292,38 @@ function BracketMatch({ match, round }) {
 
 function Fighter({ fighter, won, lost, score, isBye, isByeSlot, role }) {
   const isAka = role === 'aka';
-  const colorClass = isAka ? 'bg-[#C41E3A]' : 'bg-[#0047AB]';
+  const colorClass = isAka ? 'bg-crimson' : 'bg-blue-600';
 
-  if (isByeSlot) return (
-    <div className="px-6 py-4 flex items-center gap-4 opacity-20">
-      <div className={`w-1 h-6 rounded-full ${colorClass}`} />
-      <span className="text-[0.7rem] font-black uppercase tracking-[0.3em]">BYE</span>
-    </div>
-  );
-  
-  if (!fighter) return (
-    <div className="px-6 py-4 flex items-center gap-4 opacity-10">
-      <div className={`w-1 h-6 rounded-full ${colorClass}`} />
-      <span className="text-[0.7rem] font-black uppercase tracking-[0.3em]">TBD Protocol</span>
-    </div>
-  );
-
+  if (isByeSlot) {
+    return (
+      <div className="px-3 py-2 flex items-center text-xs text-zinc-600 italic">
+        <div className={`w-1.5 h-6 mr-2 rounded-sm ${colorClass} opacity-30`} />
+        BYE
+      </div>
+    );
+  }
+  if (!fighter) {
+    return (
+      <div className="px-3 py-2 flex items-center text-xs text-zinc-600 italic">
+        <div className={`w-1.5 h-6 mr-2 rounded-sm ${colorClass} opacity-30`} />
+        TBD
+      </div>
+    );
+  }
   return (
-    <div className={`px-6 py-4 flex items-center gap-4 transition-all
-      ${won ? 'bg-emerald-500/5' : ''}
-      ${lost ? 'opacity-30' : ''}
+    <div className={`px-3 py-2 flex items-center gap-2 transition-colors
+      ${won ? 'bg-emerald-900/10' : ''}
+      ${lost ? 'opacity-40' : ''}
     `}>
-      <div className={`w-2 h-10 rounded-full ${colorClass} shadow-lg`} />
+      <div className={`w-1.5 h-8 shrink-0 rounded-sm ${colorClass}`} />
       <div className="flex-1 min-w-0">
-        <div className={`text-[0.85rem] font-black uppercase tracking-tight truncate transition-all ${won ? 'text-white' : 'text-zinc-400'}`}>
+        <div className={`text-xs font-medium truncate ${won ? 'text-white font-bold' : 'text-zinc-300'}`}>
           {fighter.name}
         </div>
-        <div className="text-[0.5rem] font-black text-zinc-600 uppercase tracking-widest truncate">{fighter.clubName}</div>
+        <div className="text-[10px] text-zinc-500 truncate">{fighter.clubName}</div>
       </div>
       {score !== undefined && !isBye && (
-        <div className={`text-[1.2rem] font-black tabular-nums ${won ? 'text-emerald-500' : 'text-zinc-700'}`}>
-          {score}
-        </div>
+        <span className={`text-sm font-bold shrink-0 ${won ? 'text-emerald-400' : 'text-zinc-500'}`}>{score}</span>
       )}
     </div>
   );
