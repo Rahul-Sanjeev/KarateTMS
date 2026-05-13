@@ -100,8 +100,8 @@ export default function Timer({ setActiveTab }) {
       className={`flex-1 bg-black text-white flex flex-col font-sans ${isFullscreen ? "fixed inset-0 z-[9999]" : ""}`}
     >
       {/* Top controls */}
-      <div className="no-print w-full flex items-center justify-between px-6 py-4 bg-zinc-900/50 border-b border-zinc-800">
-        <div className="flex gap-2 flex-wrap">
+      <div className="no-print w-full relative z-[100] flex items-center justify-between px-6 py-4 bg-zinc-900 border-b border-zinc-800 shadow-xl">
+        <div className="flex gap-2 flex-wrap items-center">
           {[
             { key: "senior", label: `Senior ${formatTime(durations.senior)}` },
             { key: "junior", label: `Junior ${formatTime(durations.junior)}` },
@@ -112,24 +112,34 @@ export default function Timer({ setActiveTab }) {
           ].map(({ key, label }) => (
             <button
               key={key}
-              onClick={() => setAgeGroup(key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border
-                ${ageGroup === key ? "bg-white text-black border-white" : "bg-transparent border-white/30 text-white/70 hover:border-white/60 hover:text-white"}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setAgeGroup(key);
+              }}
+              className={`px-3 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all border
+                ${ageGroup === key ? "bg-white text-black border-white shadow-lg" : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-white"}`}
             >
               {label}
             </button>
           ))}
         </div>
-        <input
-          value={matchLabel}
-          onChange={(e) => setMatchLabel(e.target.value)}
-          placeholder="Match label (e.g. Final — Men -75kg)"
-          className="bg-transparent border-b border-white/10 text-white text-center text-sm w-full max-w-sm mx-4 focus:outline-none focus:border-crimson placeholder-white/20 py-1"
-        />
-        <div className="flex gap-2 ml-auto">
+        
+        <div className="flex-1 flex justify-center px-4">
+          <input
+            value={matchLabel}
+            onChange={(e) => setMatchLabel(e.target.value)}
+            placeholder="Match label..."
+            className="bg-transparent border-b border-zinc-700 text-white text-center text-sm w-full max-w-xs focus:outline-none focus:border-crimson placeholder-zinc-600 py-1 transition-colors"
+          />
+        </div>
+
+        <div className="flex gap-2 items-center">
           <button
-            onClick={toggleFullscreen}
-            className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white transition-all"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFullscreen();
+            }}
+            className="px-3 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-wider bg-zinc-800 hover:bg-zinc-700 text-white transition-all border border-zinc-700 shadow-sm"
           >
             {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
           </button>

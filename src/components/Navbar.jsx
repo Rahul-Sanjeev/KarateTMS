@@ -49,7 +49,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
           </button>
 
           {/* Tabs */}
-          <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-thin px-2 flex-1 justify-start ml-2 md:ml-6">
+          <div className="relative z-20 flex items-center gap-1 overflow-x-auto scrollbar-thin px-2 flex-1 justify-start ml-4 md:ml-8">
             {activeTab !== 'Timer' ? (
               <>
                 {!tabs.includes('Timer') && (
@@ -71,10 +71,15 @@ export default function Navbar({ activeTab, setActiveTab }) {
                 ))}
               </>
             ) : (
-              <div className="flex items-center gap-2 text-xs font-bold text-zinc-500 uppercase tracking-widest">
-                <span className="text-white">Timer Mode</span>
-                <span className="mx-2 opacity-30">|</span>
-                <button onClick={() => setActiveTab('Home')} className="hover:text-white transition-colors">Exit to Dashboard</button>
+              <div className="flex items-center gap-3 text-xs font-bold text-zinc-500 uppercase tracking-widest">
+                <span className="text-white bg-zinc-800 px-2 py-1 rounded">Timer Mode</span>
+                <span className="opacity-30">|</span>
+                <button 
+                  onClick={() => setActiveTab('Home')} 
+                  className="hover:text-crimson transition-colors py-2 px-1"
+                >
+                  Exit to Dashboard
+                </button>
               </div>
             )}
           </div>
