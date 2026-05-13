@@ -22,7 +22,7 @@ function buildInitialState() {
     matches: loadData('matches', []),
     clubs: loadData('clubs', []),
     tournamentInfo: loadData('tournamentInfo', DEFAULT_TOURNAMENT_INFO),
-    currentUser: null,
+    currentUser: loadData('currentUser', null),
     toasts: [],
   };
 }
@@ -31,8 +31,10 @@ function reducer(state, action) {
   switch (action.type) {
     // Auth
     case 'LOGIN':
+      saveData('currentUser', action.payload);
       return { ...state, currentUser: action.payload };
     case 'LOGOUT':
+      saveData('currentUser', null);
       return { ...state, currentUser: null };
 
     // Users
