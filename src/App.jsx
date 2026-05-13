@@ -29,13 +29,22 @@ const ROLE_ACCESS = {
 function AppShell() {
   const { state, cloudLoading } = useApp();
   const { currentUser } = state;
-  const [activeTab, setActiveTab] = useState('Home');
+  const [activeTab, setActiveTab] = useState(() => localStorage.getItem('activeTab') || 'Home');
 
-  // On login, switch to correct default tab
+  // Save tab to localStorage
+  useEffect(() => {
+    localStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
+
+  // On login, switch to correct default tab ONLY if we were at Login or don't have a valid tab
   useEffect(() => {
     if (!currentUser) {
-      setActiveTab('Home');
-    } else if (activeTab === 'Login') {
+      // If we are on a protected tab but logged out, go Home
+      const protectedTabs = ['Dashboard', 'Settings', 'Categories', 'My Participants', 'Brackets', 'Match Console', 'Club Standings'];
+      if (protectedTabs.includes(activeTab)) {
+        setActiveTab('Home');
+      }
+    } else if (activeTab === 'Login' || activeTab === 'Home') {
       const defaultTabs = {
         admin: 'Dashboard',
         manager: 'Categories',
@@ -105,11 +114,15 @@ function AppShell() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-black">
+    <div className="layout-grid">
       <Navbar activeTab={activeTab} setActiveTab={guardedSetTab} />
-      <main className="flex-1 flex flex-col relative overflow-hidden">
-        {renderPage()}
+      
+      <main className="relative w-full overflow-x-hidden animate-fade-in">
+        <div className="content-container py-[var(--spacing-fluid)]">
+          {renderPage()}
+        </div>
       </main>
+
       <Toast />
     </div>
   );
