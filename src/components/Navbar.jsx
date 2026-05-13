@@ -41,7 +41,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
       <div className="max-w-screen-xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <button onClick={() => setActiveTab('Home')} className="flex items-center gap-3 shrink-0 hover:opacity-80 transition-opacity relative z-10 bg-black/80 pr-2 md:pr-0">
+          <button onClick={() => setActiveTab('Home')} className="flex items-center gap-3 shrink-0 hover:opacity-80 transition-opacity">
             <KarateLogo />
             <div className="hidden sm:block">
               <span className="font-bold text-white text-sm tracking-tight">KarateTMS</span>
@@ -49,25 +49,34 @@ export default function Navbar({ activeTab, setActiveTab }) {
           </button>
 
           {/* Tabs */}
-          <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-thin px-2 relative z-0 flex-1 justify-start ml-2 md:ml-6 mask-fade-edges">
-            {/* Always show Timer even if not logged in */}
-            {!tabs.includes('Timer') && (
-              <NavTab label="Timer" active={activeTab === 'Timer'} onClick={() => setActiveTab('Timer')} isPublic />
+          <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-thin px-2 flex-1 justify-start ml-2 md:ml-6">
+            {activeTab !== 'Timer' ? (
+              <>
+                {!tabs.includes('Timer') && (
+                  <NavTab label="Timer" active={activeTab === 'Timer'} onClick={() => setActiveTab('Timer')} isPublic />
+                )}
+                {tabs.map(tab => (
+                  <NavTab
+                    key={tab}
+                    label={tab}
+                    active={activeTab === tab}
+                    onClick={() => {
+                      if (tab !== 'Timer' && !currentUser) {
+                        setActiveTab('Login');
+                      } else {
+                        setActiveTab(tab);
+                      }
+                    }}
+                  />
+                ))}
+              </>
+            ) : (
+              <div className="flex items-center gap-2 text-xs font-bold text-zinc-500 uppercase tracking-widest">
+                <span className="text-white">Timer Mode</span>
+                <span className="mx-2 opacity-30">|</span>
+                <button onClick={() => setActiveTab('Home')} className="hover:text-white transition-colors">Exit to Dashboard</button>
+              </div>
             )}
-            {tabs.map(tab => (
-              <NavTab
-                key={tab}
-                label={tab}
-                active={activeTab === tab}
-                onClick={() => {
-                  if (tab !== 'Timer' && !currentUser) {
-                    setActiveTab('Login');
-                  } else {
-                    setActiveTab(tab);
-                  }
-                }}
-              />
-            ))}
           </div>
 
           {/* Right side */}

@@ -105,9 +105,9 @@ function AppShell() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="flex flex-col min-h-screen bg-black">
       <Navbar activeTab={activeTab} setActiveTab={guardedSetTab} />
-      <main className={isTimer ? '' : 'min-h-[calc(100vh-56px)]'}>
+      <main className="flex-1 flex flex-col relative overflow-hidden">
         {renderPage()}
       </main>
       <Toast />

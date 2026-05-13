@@ -97,10 +97,10 @@ export default function Timer({ setActiveTab }) {
   return (
     <div
       ref={containerRef}
-      className={`min-h-screen bg-black text-white flex flex-col font-sans ${isFullscreen ? "fixed inset-0 z-[9999]" : ""}`}
+      className={`flex-1 bg-black text-white flex flex-col font-sans ${isFullscreen ? "fixed inset-0 z-[9999]" : ""}`}
     >
       {/* Top controls */}
-      <div className="no-print absolute top-0 left-0 w-full z-50 flex items-center justify-between px-6 py-3 bg-black/60 backdrop-blur-md border-b border-white/10 opacity-0 hover:opacity-100 transition-opacity duration-300">
+      <div className="no-print w-full flex items-center justify-between px-6 py-4 bg-zinc-900/50 border-b border-zinc-800">
         <div className="flex gap-2 flex-wrap">
           {[
             { key: "senior", label: `Senior ${formatTime(durations.senior)}` },
@@ -124,7 +124,7 @@ export default function Timer({ setActiveTab }) {
           value={matchLabel}
           onChange={(e) => setMatchLabel(e.target.value)}
           placeholder="Match label (e.g. Final — Men -75kg)"
-          className="bg-transparent border-b border-white/30 text-white text-center text-sm w-full max-w-sm mx-4 focus:outline-none focus:border-white placeholder-white/40 py-1"
+          className="bg-transparent border-b border-white/10 text-white text-center text-sm w-full max-w-sm mx-4 focus:outline-none focus:border-crimson placeholder-white/20 py-1"
         />
         <div className="flex gap-2 ml-auto">
           <button
@@ -133,17 +133,6 @@ export default function Timer({ setActiveTab }) {
           >
             {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
           </button>
-          {setActiveTab && (
-            <button
-              onClick={() => {
-                if (document.fullscreenElement) document.exitFullscreen?.();
-                setActiveTab('Home');
-              }}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-crimson/80 hover:bg-crimson text-white transition-all"
-            >
-              Exit Timer
-            </button>
-          )}
         </div>
       </div>
 
