@@ -97,251 +97,166 @@ export default function Timer({ setActiveTab }) {
   return (
     <div
       ref={containerRef}
-      className={`flex-1 bg-black text-white flex flex-col font-sans ${isFullscreen ? "fixed inset-0 z-[9999]" : ""}`}
+      className={`flex-1 bg-[#121212] text-white flex flex-col overflow-hidden ${isFullscreen ? "fixed inset-0 z-[9999]" : ""}`}
     >
-      {/* Top controls */}
-      <div className="no-print w-full relative z-[100] flex items-center justify-between px-6 py-4 bg-zinc-900 border-b border-zinc-800 shadow-xl">
-        <div className="flex gap-2 flex-wrap items-center">
-          {[
-            { key: "senior", label: `Senior ${formatTime(durations.senior)}` },
-            { key: "junior", label: `Junior ${formatTime(durations.junior)}` },
-            {
-              key: "veteran",
-              label: `Veteran ${formatTime(durations.veteran)}`,
-            },
-          ].map(({ key, label }) => (
-            <button
-              key={key}
-              onClick={(e) => {
-                e.stopPropagation();
-                setAgeGroup(key);
-              }}
-              className={`px-3 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all border
-                ${ageGroup === key ? "bg-white text-black border-white shadow-lg" : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-white"}`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+      {/* Mat-Ready Console Overlay */}
+      <div className="flex-1 flex relative">
         
-        <div className="flex-1 flex justify-center px-4">
-          <input
-            value={matchLabel}
-            onChange={(e) => setMatchLabel(e.target.value)}
-            placeholder="Match label..."
-            className="bg-transparent border-b border-zinc-700 text-white text-center text-sm w-full max-w-xs focus:outline-none focus:border-crimson placeholder-zinc-600 py-1 transition-colors"
-          />
-        </div>
-
-        <div className="flex gap-2 items-center">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleFullscreen();
-            }}
-            className="px-3 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-wider bg-zinc-800 hover:bg-zinc-700 text-white transition-all border border-zinc-700 shadow-sm"
-          >
-            {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
-          </button>
-        </div>
-      </div>
-
-      {/* Main Split Screen */}
-      <div className="flex-1 flex relative overflow-hidden">
-        {/* AKA (Red) Side */}
-        <div className="flex-1 bg-crimson relative p-4 md:p-[4vh] flex flex-col justify-center overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent pointer-events-none" />
-          
-          <div className="flex flex-col items-center justify-between h-full py-[2vh] z-10 pr-[5%] md:pr-[15%] xl:pr-[25%] relative">
-            <div className="w-full text-center flex flex-col items-center gap-[1vh]">
-              <div className="relative inline-block w-full max-w-[80%] mx-auto">
-                <input
-                  value={f1Name}
-                  onChange={(e) => setF1Name(e.target.value)}
-                  className="bg-transparent text-[6vh] md:text-[8vh] font-black text-white text-center w-full focus:outline-none uppercase tracking-widest drop-shadow-xl placeholder-white/50 leading-none"
-                  placeholder="AKA"
-                />
-                <button
-                  onClick={() => { setF1Senshu(!f1Senshu); setF2Senshu(false); }}
-                  className={`absolute -right-8 top-1/2 -translate-y-1/2 w-[4vh] h-[4vh] rounded-full border-2 font-bold text-[1.2vh] flex items-center justify-center transition-all shadow-lg cursor-pointer
-                    ${f1Senshu ? 'bg-yellow-400 border-yellow-200 text-black shadow-yellow-500/50 scale-110' : 'bg-black/30 border-white/20 text-white/40 hover:bg-black/50 hover:text-white/80'}`}
-                  title="Toggle Senshu"
-                >
-                  SEN
-                </button>
+        {/* AKA Side (Red) */}
+        <div className="flex-1 bg-[#C41E3A] relative flex flex-col items-center justify-center border-r-2 border-black/20">
+          <div className="absolute top-8 left-8 flex flex-col">
+             <input
+                value={f1Name}
+                onChange={(e) => setF1Name(e.target.value)}
+                className="bg-transparent text-[3vw] font-black text-white/90 focus:outline-none uppercase tracking-widest leading-none text-left"
+                placeholder="AKA"
+              />
+              <div className={`mt-2 w-fit px-3 py-1 rounded font-black text-[0.8rem] tracking-widest uppercase transition-all
+                ${f1Senshu ? 'bg-yellow-400 text-black' : 'bg-black/20 text-white/20'}`}
+                onClick={() => { setF1Senshu(!f1Senshu); setF2Senshu(false); }}
+              >
+                Senshu
               </div>
-              
-              <div className="text-[18vh] md:text-[28vh] xl:text-[35vh] font-black leading-none text-white drop-shadow-2xl tabular-nums">
-                {f1Score}
-              </div>
-              
-              <div className="flex justify-center gap-[4vh]">
-                <div className="flex flex-col items-center">
-                  <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">C1</span>
-                  <span className="text-[4vh] font-black text-amber-300 drop-shadow-md leading-none">{f1C1}</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">C2</span>
-                  <span className="text-[4vh] font-black text-amber-300 drop-shadow-md leading-none">{f1C2}</span>
-                </div>
-              </div>
-            </div>
+          </div>
 
-            <div className="flex flex-col items-center gap-[1vh] w-full mt-auto">
-              <div className="flex gap-[1.5vh] justify-center w-full">
-                {[
-                  { v: 1, l: "YUKO" },
-                  { v: 2, l: "WAZA-ARI" },
-                  { v: 3, l: "IPPON" },
-                ].map(({v, l}) => (
-                  <button key={l} onClick={() => scoreF1(v)} className="w-[8vh] h-[8vh] md:w-[12vh] md:h-[12vh] rounded-2xl bg-white/20 hover:bg-white/30 border border-white/50 text-white flex flex-col items-center justify-center gap-[0.5vh] backdrop-blur-sm transition-all drop-shadow-lg">
-                    <span className="text-[3vh] md:text-[4.5vh] font-black leading-none">+{v}</span>
-                    <span className="text-[1vh] md:text-[1.2vh] font-bold uppercase tracking-widest opacity-80 leading-none">{l}</span>
-                  </button>
+          <div className="text-[35vh] font-black leading-none text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] tabular-nums select-none">
+            {f1Score}
+          </div>
+
+          {/* AKA Penalties */}
+          <div className="absolute bottom-12 flex gap-12">
+            <div className="flex flex-col items-center">
+              <span className="text-white/40 text-[0.7rem] font-black tracking-widest uppercase mb-2">Category 1</span>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className={`w-4 h-8 rounded-sm border border-white/20 transition-all ${f1C1 >= i ? 'bg-amber-400 border-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'bg-black/20'}`} />
                 ))}
               </div>
-              <div className="flex gap-[1vh] justify-center w-full">
-                <button onClick={() => setF1C1(c => c + 1)} className="flex-1 py-[1vh] rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border border-amber-500/50 max-w-[15vh]">
-                  + C1
-                </button>
-                <button onClick={() => setF1C2(c => c + 1)} className="flex-1 py-[1vh] rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border border-amber-500/50 max-w-[15vh]">
-                  + C2
-                </button>
-              </div>
-              <div className="flex gap-[1vh] justify-center w-full">
-                <button onClick={() => scoreF1(-1)} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[15vh]">
-                  -1 Point
-                </button>
-                <button onClick={() => { setF1C1(Math.max(0, f1C1 - 1)); setF1C2(Math.max(0, f1C2 - 1)); }} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[15vh]">
-                  - Penalty
-                </button>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-white/40 text-[0.7rem] font-black tracking-widest uppercase mb-2">Category 2</span>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className={`w-4 h-8 rounded-sm border border-white/20 transition-all ${f1C2 >= i ? 'bg-amber-400 border-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'bg-black/20'}`} />
+                ))}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* AO (Blue) Side */}
-        <div className="flex-1 bg-blue-600 relative p-4 md:p-[4vh] flex flex-col justify-center overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-bl from-black/20 to-transparent pointer-events-none" />
-          
-          <div className="flex flex-col items-center justify-between h-full py-[2vh] z-10 pl-[5%] md:pl-[15%] xl:pl-[25%] relative">
-            <div className="w-full text-center flex flex-col items-center gap-[1vh]">
-              <div className="relative inline-block w-full max-w-[80%] mx-auto">
-                <input
-                  value={f2Name}
-                  onChange={(e) => setF2Name(e.target.value)}
-                  className="bg-transparent text-[6vh] md:text-[8vh] font-black text-white text-center w-full focus:outline-none uppercase tracking-widest drop-shadow-xl placeholder-white/50 leading-none"
-                  placeholder="AO"
-                />
-                <button
-                  onClick={() => { setF2Senshu(!f2Senshu); setF1Senshu(false); }}
-                  className={`absolute -left-8 top-1/2 -translate-y-1/2 w-[4vh] h-[4vh] rounded-full border-2 font-bold text-[1.2vh] flex items-center justify-center transition-all shadow-lg cursor-pointer
-                    ${f2Senshu ? 'bg-yellow-400 border-yellow-200 text-black shadow-yellow-500/50 scale-110' : 'bg-black/30 border-white/20 text-white/40 hover:bg-black/50 hover:text-white/80'}`}
-                  title="Toggle Senshu"
-                >
-                  SEN
-                </button>
-              </div>
-              
-              <div className="text-[18vh] md:text-[28vh] xl:text-[35vh] font-black leading-none text-white drop-shadow-2xl tabular-nums">
-                {f2Score}
-              </div>
-              
-              <div className="flex justify-center gap-[4vh]">
-                <div className="flex flex-col items-center">
-                  <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">C1</span>
-                  <span className="text-[4vh] font-black text-amber-300 drop-shadow-md leading-none">{f2C1}</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">C2</span>
-                  <span className="text-[4vh] font-black text-amber-300 drop-shadow-md leading-none">{f2C2}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center gap-[1vh] w-full mt-auto">
-              <div className="flex gap-[1.5vh] justify-center w-full">
-                {[
-                  { v: 1, l: "YUKO" },
-                  { v: 2, l: "WAZA-ARI" },
-                  { v: 3, l: "IPPON" },
-                ].map(({v, l}) => (
-                  <button key={l} onClick={() => scoreF2(v)} className="w-[8vh] h-[8vh] md:w-[12vh] md:h-[12vh] rounded-2xl bg-white/20 hover:bg-white/30 border border-white/50 text-white flex flex-col items-center justify-center gap-[0.5vh] backdrop-blur-sm transition-all drop-shadow-lg">
-                    <span className="text-[3vh] md:text-[4.5vh] font-black leading-none">+{v}</span>
-                    <span className="text-[1vh] md:text-[1.2vh] font-bold uppercase tracking-widest opacity-80 leading-none">{l}</span>
-                  </button>
-                ))}
-              </div>
-              <div className="flex gap-[1vh] justify-center w-full">
-                <button onClick={() => setF2C1(c => c + 1)} className="flex-1 py-[1vh] rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border border-amber-500/50 max-w-[15vh]">
-                  + C1
-                </button>
-                <button onClick={() => setF2C2(c => c + 1)} className="flex-1 py-[1vh] rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border border-amber-500/50 max-w-[15vh]">
-                  + C2
-                </button>
-              </div>
-              <div className="flex gap-[1vh] justify-center w-full">
-                <button onClick={() => scoreF2(-1)} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[15vh]">
-                  -1 Point
-                </button>
-                <button onClick={() => { setF2C1(Math.max(0, f2C1 - 1)); setF2C2(Math.max(0, f2C2 - 1)); }} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[15vh]">
-                  - Penalty
-                </button>
-              </div>
-            </div>
+          {/* Quick Score Controls (Invisible but active) */}
+          <div className="absolute inset-y-0 left-0 w-1/4 flex flex-col">
+            <button onClick={() => scoreF1(1)} className="flex-1 opacity-0 hover:opacity-5 transition-opacity bg-white" />
+            <button onClick={() => scoreF1(-1)} className="flex-1 opacity-0 hover:opacity-5 transition-opacity bg-black" />
           </div>
         </div>
 
-        {/* Center Clock Console overlay */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center">
-          <div className="bg-black/80 backdrop-blur-xl p-[3vh] rounded-[3vh] border-4 border-zinc-800 shadow-2xl flex flex-col items-center">
-            {matchLabel && (
-              <div className="text-zinc-400 font-bold uppercase tracking-widest text-[1.5vh] mb-[1vh] text-center max-w-[30vh] truncate">
-                {matchLabel}
+        {/* AO Side (Blue) */}
+        <div className="flex-1 bg-[#0047AB] relative flex flex-col items-center justify-center border-l-2 border-black/20">
+          <div className="absolute top-8 right-8 flex flex-col items-end">
+             <input
+                value={f2Name}
+                onChange={(e) => setF2Name(e.target.value)}
+                className="bg-transparent text-[3vw] font-black text-white/90 focus:outline-none uppercase tracking-widest leading-none text-right"
+                placeholder="AO"
+              />
+              <div className={`mt-2 w-fit px-3 py-1 rounded font-black text-[0.8rem] tracking-widest uppercase transition-all
+                ${f2Senshu ? 'bg-yellow-400 text-black' : 'bg-black/20 text-white/20'}`}
+                onClick={() => { setF2Senshu(!f2Senshu); setF1Senshu(false); }}
+              >
+                Senshu
               </div>
-            )}
+          </div>
 
-            <div
-              className={`font-black tabular-nums transition-colors select-none text-[12vh] md:text-[18vh] leading-none mb-[2vh]
-                ${isDanger ? "text-red-500 animate-pulse" : "text-white"}
-                ${buzzed ? "scale-110 text-red-500" : "scale-100"} transition-transform duration-150`}
-              style={{ textShadow: "0 10px 30px rgba(0,0,0,0.8)" }}
+          <div className="text-[35vh] font-black leading-none text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] tabular-nums select-none">
+            {f2Score}
+          </div>
+
+          {/* AO Penalties */}
+          <div className="absolute bottom-12 flex gap-12">
+            <div className="flex flex-col items-center">
+              <span className="text-white/40 text-[0.7rem] font-black tracking-widest uppercase mb-2">Category 1</span>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className={`w-4 h-8 rounded-sm border border-white/20 transition-all ${f2C1 >= i ? 'bg-amber-400 border-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'bg-black/20'}`} />
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-white/40 text-[0.7rem] font-black tracking-widest uppercase mb-2">Category 2</span>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className={`w-4 h-8 rounded-sm border border-white/20 transition-all ${f2C2 >= i ? 'bg-amber-400 border-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'bg-black/20'}`} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Score Controls (Invisible but active) */}
+          <div className="absolute inset-y-0 right-0 w-1/4 flex flex-col">
+            <button onClick={() => scoreF2(1)} className="flex-1 opacity-0 hover:opacity-5 transition-opacity bg-white" />
+            <button onClick={() => scoreF2(-1)} className="flex-1 opacity-0 hover:opacity-5 transition-opacity bg-black" />
+          </div>
+        </div>
+
+        {/* Center Clock Console (Deep Charcoal) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
+          <div className="bg-[#121212] border-4 border-zinc-800 shadow-[0_0_100px_rgba(0,0,0,0.8)] px-16 py-10 rounded-[3rem] flex flex-col items-center min-w-[40vw]">
+            <div className="mb-4 flex flex-col items-center">
+               <span className="text-zinc-600 font-black text-[0.6rem] uppercase tracking-[0.5em] mb-2">Official Timekeeper</span>
+               {matchLabel && <span className="text-white font-bold uppercase tracking-widest text-[0.8rem] opacity-40">{matchLabel}</span>}
+            </div>
+
+            <div className={`font-mono font-black tabular-nums tracking-tighter transition-all duration-300 select-none
+              ${isDanger ? "text-crimson animate-pulse" : "text-white"}
+              ${buzzed ? "scale-110 text-crimson" : "scale-100"}
+              text-[20vh] md:text-[25vh] leading-none mb-10`}
             >
               {formatTime(timeLeft)}
             </div>
 
-            {/* Controls */}
-            <div className="flex gap-[2vh] w-full">
+            <div className="flex gap-4 w-full no-print">
               <button
                 onClick={() => setRunning((r) => !r)}
-                className={`flex-1 py-[2vh] rounded-[2vh] font-black uppercase tracking-widest text-[2vh] transition-all shadow-xl ${running ? "bg-amber-500 hover:bg-amber-400 text-black" : "bg-emerald-500 hover:bg-emerald-400 text-black"}`}
+                className={`flex-1 py-6 rounded-2xl font-black uppercase tracking-[0.3em] text-[1.2rem] transition-all
+                  ${running ? "bg-zinc-800 text-zinc-400 hover:bg-zinc-700" : "bg-white text-black hover:bg-zinc-200"}`}
               >
-                {running ? "PAUSE" : "START"}
+                {running ? "Pause" : "Start"}
               </button>
               <button
                 onClick={handleReset}
-                className="w-[8vh] rounded-[2vh] font-black text-[3vh] bg-zinc-800 hover:bg-zinc-700 text-white transition-all shadow-xl flex items-center justify-center"
-                title="Reset Time"
+                className="w-20 rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white flex items-center justify-center text-[1.5rem] transition-all"
               >
                 ↺
               </button>
             </div>
           </div>
+        </div>
+      </div>
 
-          <button
-            onClick={() => {
-              setF1Score(0);
-              setF2Score(0);
-              setF1C1(0);
-              setF1C2(0);
-              setF2C1(0);
-              setF2C2(0);
-              setF1Senshu(false);
-              setF2Senshu(false);
-            }}
-            className="mt-[2vh] px-[2vh] py-[1vh] bg-black/60 backdrop-blur-md rounded-full text-[1.2vh] font-bold text-zinc-400 hover:text-white uppercase tracking-widest transition-colors border border-zinc-800 shadow-lg"
-          >
-            Reset Scores & Penalties
+      {/* Official Toolbar (Only shown when not in full mat view or on hover) */}
+      <div className="no-print h-16 bg-[#121212] border-t border-zinc-800 flex items-center justify-between px-8 z-[101]">
+        <div className="flex gap-4">
+           {['senior', 'junior', 'veteran'].map(group => (
+             <button
+                key={group}
+                onClick={() => setAgeGroup(group)}
+                className={`text-[0.6rem] font-black uppercase tracking-widest px-4 py-2 rounded-lg transition-all
+                  ${ageGroup === group ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+             >
+                {group}
+             </button>
+           ))}
+        </div>
+        
+        <div className="flex gap-4">
+          <button onClick={() => scoreF1(1)} className="text-[0.6rem] font-bold uppercase tracking-widest text-white/40 hover:text-white">+Aka</button>
+          <button onClick={() => scoreF2(1)} className="text-[0.6rem] font-bold uppercase tracking-widest text-white/40 hover:text-white">+Ao</button>
+          <div className="w-px h-4 bg-zinc-800" />
+          <button onClick={() => setF1C1(c => c + 1)} className="text-[0.6rem] font-bold uppercase tracking-widest text-zinc-600 hover:text-amber-500">Aka Pen</button>
+          <button onClick={() => setF2C1(c => c + 1)} className="text-[0.6rem] font-bold uppercase tracking-widest text-zinc-600 hover:text-amber-500">Ao Pen</button>
+          <div className="w-px h-4 bg-zinc-800" />
+          <button onClick={toggleFullscreen} className="text-[0.6rem] font-black uppercase tracking-widest text-white border border-white/20 px-4 py-2 rounded-lg hover:bg-white hover:text-black transition-all">
+            {isFullscreen ? "Exit Full View" : "Mat View"}
           </button>
         </div>
       </div>

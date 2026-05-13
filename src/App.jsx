@@ -124,6 +124,13 @@ function AppShell() {
       </main>
 
       <Toast />
+
+      {/* Footer Signature */}
+      <footer className="no-print w-full py-6 mt-auto flex justify-center border-t border-zinc-900/50">
+        <p className="text-[0.6rem] font-black text-zinc-800 uppercase tracking-[0.4em] italic opacity-50">
+          Powered by <span className="text-zinc-600">Voxelyn Dynamics</span>
+        </p>
+      </footer>
     </div>
   );
 }
