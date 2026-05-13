@@ -158,7 +158,6 @@ function NavTab({ label, active, onClick, isPublic }) {
     </button>
   );
 }
-}
 
 // Inline SVG karate silhouette logo
 function KarateLogo() {
