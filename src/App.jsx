@@ -158,10 +158,19 @@ function AppShell() {
       <main className="flex-1 flex flex-col relative overflow-hidden">
         {renderPage()}
       </main>
-      <footer className="no-print w-full py-4 flex justify-center opacity-30">
-        <p className="text-[10px] text-zinc-500 font-medium tracking-widest uppercase">
-          Powered by Voxelyn Dynamics
+      <footer className="no-print w-full py-8 flex flex-col items-center gap-2 border-t border-zinc-900/50">
+        <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.3em] select-none">
+          © {new Date().getFullYear()} All rights reserved
         </p>
+        <a 
+          href="https://www.voxelyndynamics.com/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-[11px] text-zinc-400 font-black tracking-[0.2em] uppercase hover:text-white hover:scale-105 transition-all duration-300 flex items-center gap-2"
+        >
+          Powered by <span className="text-zinc-200">Voxelyn Dynamics</span>
+          <span className="text-crimson/50 group-hover:text-crimson">→</span>
+        </a>
       </footer>
       <Toast />
     </div>

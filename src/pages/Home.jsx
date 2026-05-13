@@ -17,13 +17,7 @@ export default function Home({ setActiveTab }) {
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-20 z-10">
         <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
           
-          <div className="mb-4 text-center animate-fade-in-up" style={{animationDelay: '50ms'}}>
-            <span className="text-crimson font-black uppercase italic tracking-[0.5em] text-[0.7rem] opacity-80">
-              Lead the Mat
-            </span>
-          </div>
-
-          <div className="mb-6 text-crimson animate-fade-in-up">
+          <div className="mb-10 text-crimson animate-fade-in-up">
             <KarateSVG />
           </div>
 
@@ -94,15 +88,6 @@ export default function Home({ setActiveTab }) {
         </div>
       </div>
       
-      {/* Footer */}
-      <div className="py-8 text-center z-10 mt-auto flex flex-col gap-2">
-        <p className="text-xs font-medium tracking-widest text-zinc-600 uppercase">
-          {info.organizer ? `Organized by ${info.organizer}` : 'Official Tournament Management System'}
-        </p>
-        <p className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest">
-          © {new Date().getFullYear()} All rights reserved • Voxelyn Dynamics / Rahul Sanjeev
-        </p>
-      </div>
     </div>
   );
 }

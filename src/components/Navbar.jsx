@@ -51,7 +51,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
               </div>
               <div className="flex flex-col items-start leading-none">
                 <span className="font-black text-white text-base tracking-tighter uppercase italic">Karate<span className="text-crimson">TMS</span></span>
-                <span className="text-[9px] text-zinc-500 font-bold tracking-[0.2em] uppercase">Tournament Mgr</span>
+                <span className="text-[9px] text-zinc-500 font-bold tracking-[0.2em] uppercase">The Digital Dojo</span>
               </div>
             </button>
             
