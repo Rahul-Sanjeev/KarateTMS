@@ -162,9 +162,9 @@ function AppShell() {
         <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.3em] select-none">
           © {new Date().getFullYear()} All rights reserved
         </p>
-        <a 
-          href="https://www.voxelyndynamics.com/" 
-          target="_blank" 
+        <a
+          href="https://www.voxelyndynamics.com/"
+          target="_blank"
           rel="noopener noreferrer"
           className="text-[11px] text-zinc-400 font-black tracking-[0.2em] uppercase hover:text-white hover:scale-105 transition-all duration-300 flex items-center gap-2"
         >

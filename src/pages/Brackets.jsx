@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { generateId } from '../utils/storage';
+import CategorySelector from '../components/CategorySelector';
 
 function fisherYates(arr) {
   const a = [...arr];
@@ -175,17 +176,15 @@ export default function Brackets() {
 
       {/* Category Selector */}
       <div className="flex gap-3 mb-6 flex-wrap no-print">
-        <div className="flex-1 min-w-[200px] max-w-sm">
+        <div className="flex-1 min-w-[240px] max-w-md">
           <label className="label">Select Category</label>
-          <select id="bracket-cat-select" className="select-field" value={selectedCatId} onChange={e => setSelectedCatId(e.target.value)}>
-            <option value="">— Choose a category —</option>
-            {lockedCats.map(c => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-            {categories.filter(c => c.status === 'open').map(c => (
-              <option key={c.id} value={c.id} disabled>{c.name} (open — lock first)</option>
-            ))}
-          </select>
+          <CategorySelector
+            categories={categories}
+            selectedId={selectedCatId}
+            onChange={id => setSelectedCatId(id)}
+            isOptionDisabled={c => c.status === 'open'}
+            placeholder="Search categories (open must lock first)..."
+          />
         </div>
         {canGenerate && selectedCatId && (
           <div className="flex items-end">

@@ -23,8 +23,14 @@ export default function Timer({ setActiveTab }) {
   const [f2Score, setF2Score] = useState(0);
   const [f1C1, setF1C1] = useState(0);
   const [f1C2, setF1C2] = useState(0);
+  const [f1C3, setF1C3] = useState(0);
+  const [f1HC, setF1HC] = useState(0);
+  const [f1H, setF1H] = useState(0);
   const [f2C1, setF2C1] = useState(0);
   const [f2C2, setF2C2] = useState(0);
+  const [f2C3, setF2C3] = useState(0);
+  const [f2HC, setF2HC] = useState(0);
+  const [f2H, setF2H] = useState(0);
   const [f1Senshu, setF1Senshu] = useState(false);
   const [f2Senshu, setF2Senshu] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -175,15 +181,19 @@ export default function Timer({ setActiveTab }) {
                 {f1Score}
               </div>
               
-              <div className="flex justify-center gap-[4vh]">
-                <div className="flex flex-col items-center">
-                  <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">C1</span>
-                  <span className="text-[4vh] font-black text-amber-300 drop-shadow-md leading-none">{f1C1}</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">C2</span>
-                  <span className="text-[4vh] font-black text-amber-300 drop-shadow-md leading-none">{f1C2}</span>
-                </div>
+              <div className="flex justify-center gap-[2.5vh]">
+                {[
+                  { label: "C1", value: f1C1 },
+                  { label: "C2", value: f1C2 },
+                  { label: "C3", value: f1C3 },
+                  { label: "HC", value: f1HC },
+                  { label: "H", value: f1H },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex flex-col items-center">
+                    <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">{label}</span>
+                    <span className={`text-[4vh] font-black drop-shadow-md leading-none ${label === 'H' && value > 0 ? 'text-red-400' : label === 'HC' && value > 0 ? 'text-orange-400' : 'text-amber-300'}`}>{value}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -200,20 +210,36 @@ export default function Timer({ setActiveTab }) {
                   </button>
                 ))}
               </div>
-              <div className="flex gap-[1vh] justify-center w-full">
-                <button onClick={() => setF1C1(c => c + 1)} className="flex-1 py-[1vh] rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border border-amber-500/50 max-w-[15vh]">
-                  + C1
-                </button>
-                <button onClick={() => setF1C2(c => c + 1)} className="flex-1 py-[1vh] rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border border-amber-500/50 max-w-[15vh]">
-                  + C2
-                </button>
+              <div className="flex gap-[1vh] justify-center w-full flex-wrap">
+                {[
+                  { label: "C1", setter: setF1C1 },
+                  { label: "C2", setter: setF1C2 },
+                  { label: "C3", setter: setF1C3 },
+                  { label: "HC", setter: setF1HC },
+                  { label: "H", setter: setF1H },
+                ].map(({ label, setter }) => (
+                  <button key={label} onClick={() => setter(c => c + 1)} className={`flex-1 py-[1vh] rounded-xl font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border max-w-[12vh]
+                    ${label === 'H' ? 'bg-red-500/20 hover:bg-red-500/40 text-red-100 border-red-500/50' : label === 'HC' ? 'bg-orange-500/20 hover:bg-orange-500/40 text-orange-100 border-orange-500/50' : 'bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 border-amber-500/50'}`}>
+                    + {label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-[1vh] justify-center w-full flex-wrap">
+                {[
+                  { label: "C1", setter: setF1C1 },
+                  { label: "C2", setter: setF1C2 },
+                  { label: "C3", setter: setF1C3 },
+                  { label: "HC", setter: setF1HC },
+                  { label: "H", setter: setF1H },
+                ].map(({ label, setter }) => (
+                  <button key={label} onClick={() => setter(c => Math.max(0, c - 1))} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[12vh]">
+                    - {label}
+                  </button>
+                ))}
               </div>
               <div className="flex gap-[1vh] justify-center w-full">
                 <button onClick={() => scoreF1(-1)} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[15vh]">
                   -1 Point
-                </button>
-                <button onClick={() => { setF1C1(Math.max(0, f1C1 - 1)); setF1C2(Math.max(0, f1C2 - 1)); }} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[15vh]">
-                  - Penalty
                 </button>
               </div>
             </div>
@@ -247,15 +273,19 @@ export default function Timer({ setActiveTab }) {
                 {f2Score}
               </div>
               
-              <div className="flex justify-center gap-[4vh]">
-                <div className="flex flex-col items-center">
-                  <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">C1</span>
-                  <span className="text-[4vh] font-black text-amber-300 drop-shadow-md leading-none">{f2C1}</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">C2</span>
-                  <span className="text-[4vh] font-black text-amber-300 drop-shadow-md leading-none">{f2C2}</span>
-                </div>
+              <div className="flex justify-center gap-[2.5vh]">
+                {[
+                  { label: "C1", value: f2C1 },
+                  { label: "C2", value: f2C2 },
+                  { label: "C3", value: f2C3 },
+                  { label: "HC", value: f2HC },
+                  { label: "H", value: f2H },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex flex-col items-center">
+                    <span className="text-white/70 text-[1.5vh] font-bold tracking-widest uppercase">{label}</span>
+                    <span className={`text-[4vh] font-black drop-shadow-md leading-none ${label === 'H' && value > 0 ? 'text-red-400' : label === 'HC' && value > 0 ? 'text-orange-400' : 'text-amber-300'}`}>{value}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -272,20 +302,36 @@ export default function Timer({ setActiveTab }) {
                   </button>
                 ))}
               </div>
-              <div className="flex gap-[1vh] justify-center w-full">
-                <button onClick={() => setF2C1(c => c + 1)} className="flex-1 py-[1vh] rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border border-amber-500/50 max-w-[15vh]">
-                  + C1
-                </button>
-                <button onClick={() => setF2C2(c => c + 1)} className="flex-1 py-[1vh] rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border border-amber-500/50 max-w-[15vh]">
-                  + C2
-                </button>
+              <div className="flex gap-[1vh] justify-center w-full flex-wrap">
+                {[
+                  { label: "C1", setter: setF2C1 },
+                  { label: "C2", setter: setF2C2 },
+                  { label: "C3", setter: setF2C3 },
+                  { label: "HC", setter: setF2HC },
+                  { label: "H", setter: setF2H },
+                ].map(({ label, setter }) => (
+                  <button key={label} onClick={() => setter(c => c + 1)} className={`flex-1 py-[1vh] rounded-xl font-bold tracking-widest uppercase text-[1.2vh] md:text-[1.5vh] backdrop-blur-sm transition-all border max-w-[12vh]
+                    ${label === 'H' ? 'bg-red-500/20 hover:bg-red-500/40 text-red-100 border-red-500/50' : label === 'HC' ? 'bg-orange-500/20 hover:bg-orange-500/40 text-orange-100 border-orange-500/50' : 'bg-amber-500/20 hover:bg-amber-500/40 text-amber-100 border-amber-500/50'}`}>
+                    + {label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-[1vh] justify-center w-full flex-wrap">
+                {[
+                  { label: "C1", setter: setF2C1 },
+                  { label: "C2", setter: setF2C2 },
+                  { label: "C3", setter: setF2C3 },
+                  { label: "HC", setter: setF2HC },
+                  { label: "H", setter: setF2H },
+                ].map(({ label, setter }) => (
+                  <button key={label} onClick={() => setter(c => Math.max(0, c - 1))} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[12vh]">
+                    - {label}
+                  </button>
+                ))}
               </div>
               <div className="flex gap-[1vh] justify-center w-full">
                 <button onClick={() => scoreF2(-1)} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[15vh]">
                   -1 Point
-                </button>
-                <button onClick={() => { setF2C1(Math.max(0, f2C1 - 1)); setF2C2(Math.max(0, f2C2 - 1)); }} className="flex-1 py-[0.8vh] rounded-xl bg-black/30 hover:bg-black/50 text-white/60 hover:text-white font-bold tracking-widest uppercase text-[1vh] md:text-[1.2vh] backdrop-blur-sm transition-all border border-black/20 max-w-[15vh]">
-                  - Penalty
                 </button>
               </div>
             </div>
@@ -334,8 +380,14 @@ export default function Timer({ setActiveTab }) {
               setF2Score(0);
               setF1C1(0);
               setF1C2(0);
+              setF1C3(0);
+              setF1HC(0);
+              setF1H(0);
               setF2C1(0);
               setF2C2(0);
+              setF2C3(0);
+              setF2HC(0);
+              setF2H(0);
               setF1Senshu(false);
               setF2Senshu(false);
             }}

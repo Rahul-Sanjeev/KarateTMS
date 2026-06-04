@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useApp } from '../context/AppContext';
+import CategorySelector from '../components/CategorySelector';
 
 const SCORE_ACTIONS = [
   { label: '+1 YUKO', value: 1, color: 'bg-zinc-700 hover:bg-zinc-600', type: 'score' },
@@ -236,10 +237,13 @@ export default function MatchConsole() {
         {/* Sidebar */}
         <div className="lg:w-72 shrink-0">
           <div className="mb-3">
-            <select id="match-cat-filter" className="select-field text-sm" value={filterCatId} onChange={e => setFilterCatId(e.target.value)}>
-              <option value="">All Categories</option>
-              {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
+            <CategorySelector
+              categories={categories}
+              selectedId={filterCatId}
+              onChange={id => setFilterCatId(id)}
+              allowAll={true}
+              placeholder="Search categories..."
+            />
           </div>
 
           <div className="space-y-4 max-h-[70vh] overflow-y-auto scrollbar-thin pr-1">
