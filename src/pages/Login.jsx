@@ -49,10 +49,19 @@ export default function Login({ setActiveTab }) {
         return;
       }
 
-      // 4. DATABASE / STATE EVALUATION: Match credentials against fetched state users [cite: 12]
-      // NOTE: If your context failed to fetch from Supabase (e.g., due to Chrome Extension blocks),
-      // state.users might be empty, resulting in a false "Invalid username or password" error[cite: 38, 42].
-      const user = state.users?.find(
+      // 4. DATABASE INTEGRITY CHECK:
+      // If state.users failed to fetch from Supabase during initial load, state.users will be
+      // undefined or empty, causing the app to throw a false "Invalid credentials" error.
+      if (!state.users || state.users.length === 0) {
+        setError(
+          "Database Connection Error: The user roster could not be loaded from Supabase. Please check your network or ad-blockers.",
+        );
+        setLoading(false);
+        return;
+      }
+
+      // 5. STATE EVALUATION: Match credentials against fetched state users [cite: 12]
+      const user = state.users.find(
         (u) =>
           u.username?.toLowerCase() === cleanUsername &&
           u.password === cleanPassword,
