@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
 
+// Hardcoded administrator configuration [cite: 3]
 const ADMIN = {
   id: "admin",
   role: "admin",
@@ -9,23 +10,38 @@ const ADMIN = {
 };
 
 export default function Login({ setActiveTab }) {
+  // Pull state, dispatch, and custom toast notifications from your AppContext [cite: 4]
   const { state, dispatch, addToast } = useApp();
+
+  // Local state variables for form inputs and UI conditions [cite: 4, 5]
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPw, setShowPw] = useState(false);
 
+  /**
+   * Form Submission Handler
+   * Sanitizes inputs and validates credentials against local memory or context state.
+   */
   const handleLogin = (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    // Force lowercase on username and strip empty spaces from both
+    // 1. SANITIZATION: Eliminate hidden whitespaces/tabs and force lowercase on the username
+    // This helps mitigate aggressive browser autofill issues[cite: 16, 26].
     const cleanUsername = username.trim().toLowerCase();
     const cleanPassword = password.trim();
 
+    // 2. DEBUGGING: Keep track of exactly what data React processes upon submission
+    console.log("Submitting sanitized inputs:", {
+      cleanUsername,
+      cleanPassword,
+    });
+
     setTimeout(() => {
+      // 3. HARDCODED EVALUATION: Match credentials against the local system administrator [cite: 11]
       if (cleanUsername === "admin" && cleanPassword === "Rahul@1997") {
         dispatch({ type: "LOGIN", payload: ADMIN });
         addToast("Welcome back, Rahul Sanjeev!");
@@ -33,15 +49,20 @@ export default function Login({ setActiveTab }) {
         return;
       }
 
-      // Check stored users
-      const user = state.users.find(
-        (u) => u.username === username && u.password === password,
+      // 4. DATABASE / STATE EVALUATION: Match credentials against fetched state users [cite: 12]
+      // NOTE: If your context failed to fetch from Supabase (e.g., due to Chrome Extension blocks),
+      // state.users might be empty, resulting in a false "Invalid username or password" error[cite: 38, 42].
+      const user = state.users?.find(
+        (u) =>
+          u.username?.toLowerCase() === cleanUsername &&
+          u.password === cleanPassword,
       );
 
       if (user) {
         dispatch({ type: "LOGIN", payload: user });
         addToast(`Welcome, ${user.name}!`);
       } else {
+        // Fallback error messaging if no validation criteria matches [cite: 9, 56]
         setError("Invalid username or password.");
       }
       setLoading(false);
@@ -51,7 +72,7 @@ export default function Login({ setActiveTab }) {
   return (
     <div className="min-h-[calc(100vh-56px)] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm animate-fade-in">
-        {/* Logo card */}
+        {/* Top Header Card & Brand Identity [cite: 7] */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 shadow-2xl">
             <KarateSVG />
@@ -64,8 +85,10 @@ export default function Login({ setActiveTab }) {
           </p>
         </div>
 
+        {/* Authentication Form Card [cite: 7] */}
         <div className="card shadow-2xl">
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            {/* Username Input Field */}
             <div>
               <label htmlFor="login-username" className="label">
                 Username
@@ -82,6 +105,7 @@ export default function Login({ setActiveTab }) {
               />
             </div>
 
+            {/* Password Input Field */}
             <div>
               <label htmlFor="login-password" className="label">
                 Password
@@ -97,6 +121,7 @@ export default function Login({ setActiveTab }) {
                   autoComplete="current-password"
                   required
                 />
+                {/* Visibility Toggle Button */}
                 <button
                   type="button"
                   onClick={() => setShowPw((p) => !p)}
@@ -107,12 +132,14 @@ export default function Login({ setActiveTab }) {
               </div>
             </div>
 
+            {/* Error Alert Box [cite: 7] */}
             {error && (
               <div className="bg-red-950/50 border border-red-800/50 text-red-400 text-sm px-3 py-2 rounded-lg">
                 {error}
               </div>
             )}
 
+            {/* Submit Button with Dynamic Loading State */}
             <button
               type="submit"
               disabled={loading}
@@ -137,6 +164,7 @@ export default function Login({ setActiveTab }) {
           </div>
         </div>
 
+        {/* Public Bypass Feature Access */}
         <p className="text-center text-xs text-zinc-600 mt-6">
           Public Timer available without login →{" "}
           <button
@@ -151,6 +179,9 @@ export default function Login({ setActiveTab }) {
   );
 }
 
+/**
+ * System Logo Render Asset [cite: 8]
+ */
 function KarateSVG() {
   return (
     <svg
