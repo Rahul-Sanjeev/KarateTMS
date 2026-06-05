@@ -78,7 +78,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
 
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
-    setActiveTab('Timer');
+    setActiveTab('Home');
     setMobileOpen(false);
   };
 
