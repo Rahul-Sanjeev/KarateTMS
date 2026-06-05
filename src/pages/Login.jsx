@@ -21,9 +21,12 @@ export default function Login({ setActiveTab }) {
     setError("");
     setLoading(true);
 
+    // Force lowercase on username and strip empty spaces from both
+    const cleanUsername = username.trim().toLowerCase();
+    const cleanPassword = password.trim();
+
     setTimeout(() => {
-      // Check hardcoded admin
-      if (username === "admin" && password === "Rahul@1997") {
+      if (cleanUsername === "admin" && cleanPassword === "Rahul@1997") {
         dispatch({ type: "LOGIN", payload: ADMIN });
         addToast("Welcome back, Rahul Sanjeev!");
         setLoading(false);
